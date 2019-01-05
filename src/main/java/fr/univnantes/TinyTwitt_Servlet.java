@@ -9,7 +9,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.googlecode.objectify.ObjectifyService;
 
+
 @SuppressWarnings("serial")
+
 public class TinyTwitt_Servlet extends HttpServlet{
 
 	static {
@@ -25,7 +27,7 @@ public class TinyTwitt_Servlet extends HttpServlet{
 	    response.setContentType("text/plain");
 	    response.setCharacterEncoding("UTF-8");
 
-	    response.getWriter().print("Bienvenue sur Tiny Twitt , votre réseau favori!\r\n");
+	    response.getWriter().print("Bienvenue sur Tiny Twitt , votre réseau favori! 2.0\r\n");
 
 	  }
 }

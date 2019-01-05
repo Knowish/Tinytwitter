@@ -26,14 +26,13 @@ public class User implements Serializable{
 	
 	public User() {}
 	
-	public User(com.google.appengine.api.datastore.Entity e) {
+	public User( String login, String email, String pw, String firstname, String lastname) {
 		
-		this.setId((Long) e.getKey().getId());
-		this.setLogin((String) e.getProperty("login"));
-		this.email = (String) e.getProperty("login");
-		this.setPw((String) e.getProperty("login"));
-		this.setFirstname((String) e.getProperty("login"));
-		this.setLastname((String) e.getProperty("login"));
+		this.login = login;
+		this.email = email; 
+		this.pw = pw;
+		this.firstname = firstname;
+		this.lastname = lastname;
 		
 	}
 
