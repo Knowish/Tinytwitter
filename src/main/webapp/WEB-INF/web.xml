@@ -10,7 +10,7 @@
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>TinyTwitt</servlet-name>
-		<url-pattern>/TinyTwitt</url-pattern>
+		<url-pattern>/</url-pattern>
 	</servlet-mapping>
 
           <welcome-file-list>

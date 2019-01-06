@@ -34,5 +34,15 @@
 			<attribute name="org.eclipse.jst.component.nondependency" value=""/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/Alexandre/.m2/repository/com/google/appengine/appengine-api-1.0-sdk/1.9.60/appengine-api-1.0-sdk-1.9.60.jar">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+			<attribute name="org.eclipse.jst.component.archivename" value="appengine-api-1.0-sdk-1.9.60.jar"/>
+			<attribute name="maven.groupId" value="com.google.appengine"/>
+			<attribute name="maven.artifactId" value="appengine-api-1.0-sdk"/>
+			<attribute name="maven.version" value="1.9.60"/>
+			<attribute name="maven.scope" value="compile"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="output" path="target/TinyTwitt-0.1.0-SNAPSHOT/WEB-INF/classes"/>
 </classpath>

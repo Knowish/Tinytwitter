@@ -1,87 +1,119 @@
 package fr.univnantes;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
-import com.googlecode.objectify.annotation.Entity;
-import com.googlecode.objectify.annotation.Id;
+import javax.jdo.annotations.IdGeneratorStrategy;
+import javax.jdo.annotations.IdentityType;
+import javax.jdo.annotations.PersistenceCapable;
+import javax.jdo.annotations.Persistent;
+import javax.jdo.annotations.PrimaryKey;
 
-@Entity
+import com.google.appengine.api.datastore.Entity;
+
+@PersistenceCapable(identityType=IdentityType.APPLICATION)
 public class User implements Serializable{
 	
-	@Id
+	@PrimaryKey
+	@Persistent(valueStrategy=IdGeneratorStrategy.IDENTITY)
 	private Long id;
-	
+	@Persistent
 	private String login;
-	
+	@Persistent
 	private String email;
+	@Persistent
+	private String mdp;
+	@Persistent
+	private String prenom;
+	@Persistent
+	private String nom;
 	
-	private String pw;
-	
-	private String firstname;
-	
-	private String lastname;
-	
-	private List<Long> followers;
-	
+	@Persistent
+	private List<Long> followers;//Liste des gens qui me suivent
+/*
+    private List<Long> following;//Liste des gens que je suis*/
+
 	public User() {}
 	
-	public User( String login, String email, String pw, String firstname, String lastname) {
-		
-		this.login = login;
-		this.email = email; 
-		this.pw = pw;
-		this.firstname = firstname;
-		this.lastname = lastname;
-		
+	public User(Entity e) {
+		id = (Long) e.getKey().getId();
+		login = (String) e.getProperty("login");
+		email = (String) e.getProperty("email");
+		mdp = (String) e.getProperty("pw");
+		prenom = (String) e.getProperty("firstname");
+		nom = (String) e.getProperty("lastname");
+		/*followers = new ArrayList<Long>();
+		following = new ArrayList<Long>();*/
 	}
-
-	private Long getId() {
+	
+	public Long getId() {
 		return id;
 	}
-
-	private void setId(Long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
-
-	private String getLogin() {
+	public String getLogin() {
 		return login;
 	}
-
-	private void setLogin(String login) {
+	public void setLogin(String login) {
 		this.login = login;
 	}
+	public String getEmail() {
+		return email;
+	}
+	public void setEmail(String email) {
+		this.email = email;
+	}
+	public String getMdp() {
+		return mdp;
+	}
+	public void setMdp(String mdp) {
+		this.mdp = mdp;
+	}
+	public String getPrenom() {
+		return prenom;
+	}
+	public void setPrenom(String prenom) {
+		this.prenom = prenom;
+	}
+	public String getNom() {
+		return nom;
+	}
+	public void setNom(String nom) {
+		this.nom = nom;
+	}
 
-	private List<Long> getFollowers() {
+	public List<Long> getFollowers() {
 		return followers;
 	}
-
-	private void setFollowers(List<Long> followers) {
+	
+	public boolean addFollower(Long idFollower) {
+        return this.followers.add(idFollower);
+    }
+	
+	public void setFollowers(List<Long> followers) {
 		this.followers = followers;
 	}
+	/*
+	public List<Long> getFollowing() {
+        return following;
+    }
 
-	private String getPw() {
-		return pw;
-	}
+    public void setFollowing(List<Long> following) {
+        this.following = following;
+    }
 
-	private void setPw(String pw) {
-		this.pw = pw;
-	}
+    public boolean addFollowing(Long idFollowing) {
+        return this.following.add(idFollowing);
+    }
 
-	private String getFirstname() {
-		return firstname;
-	}
+    public boolean containsFollower(Long idFollower) {
+        return followers.contains(idFollower);
+    }
 
-	private void setFirstname(String firstname) {
-		this.firstname = firstname;
-	}
-
-	private String getLastname() {
-		return lastname;
-	}
-
-	private void setLastname(String lastname) {
-		this.lastname = lastname;
-	}
-
+    public boolean containsFollowing(Long idFollowing) {
+        return following.contains(idFollowing);
+    }
+*/
 }
