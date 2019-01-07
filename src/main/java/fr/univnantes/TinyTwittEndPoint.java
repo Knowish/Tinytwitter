@@ -326,4 +326,36 @@ public class TinyTwittEndPoint {
         }
     }
 
+    @ApiMethod(name = "addNbTwitt")
+    public void addNbTwitt(@Named("nbFollowers") int nbTwitt, @Named("followed") String login) {
+
+        DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
+        Filter filter = new Query.FilterPredicate("login", Query.FilterOperator.EQUAL, login);
+        Query query = new Query("User").setFilter(filter);
+        Entity userEntity = ds.prepare(query).asSingleEntity();
+
+        if (userEntity == null){
+            throw new NullPointerException("User not found");
+        }
+
+        for(int i = 0; i < nbTwitt; i++){
+
+            ArrayList<String> listTwitt = new ArrayList<>();
+
+            listTwitt.add("The concept of global warming was created by and for the Chinese in order to make U.S. manufacturing non-competitive.");
+            listTwitt.add("Why would Kim Jong-un insult me by calling me \"old,\" when I would NEVER call him \"short and fat?\" Oh well, I try so hard to be his friend - and maybe someday that will happen!");
+            listTwitt.add("It's freezing and snowing in New York--we need global warming!");
+            listTwitt.add("Healthy young child goes to doctor, gets pumped with massive shot of many vaccines, doesn't feel good and changes - AUTISM. Many such cases!");
+            listTwitt.add("An 'extremely credible source' has called my office and told me that @BarackObama's birth certificate is a fraud.");
+            listTwitt.add("Sorry losers and haters, but my I.Q. is one of the highest -and you all know it! Please don't feel so stupid or insecure,it's not your fault");
+            listTwitt.add("Robert Pattinson should not take back Kristen Stewart. She cheated on him like a dog & will do it again--just watch. He can do much better!");
+            listTwitt.add("Thanks- many are saying I'm the best 140 character writer in the world. It's easy when it's fun.");
+            listTwitt.add("Obama is, without question, the WORST EVER president. I predict he will now do something really bad and totally stupid to show manhood!");
+            listTwitt.add("The U.S. cannot allow EBOLA infected people back. People that go to far away places to help out are great-but must suffer the consequences!");
+
+            int k = (int)Math.floor(Math.random() * 10);
+            createTwitt(login,listTwitt.get(k));
+        }
+    }
+
 }
