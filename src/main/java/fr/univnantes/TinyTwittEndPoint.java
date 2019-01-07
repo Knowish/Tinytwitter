@@ -96,7 +96,7 @@ public class TinyTwittEndPoint {
      * @throws EntityNotFoundException
      */
     @ApiMethod(name = "createTwitt", httpMethod = ApiMethod.HttpMethod.POST)
-    public void createTwitt(@Named("login") String login, @Named("message") String message) throws EntityNotFoundException {
+    public void createTwitt(@Named("login") String login, @Named("message") String message)  {
         //User twittos = ofy().load().type(User.class).filter("login", login).first().now();
 
         DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
@@ -105,7 +105,7 @@ public class TinyTwittEndPoint {
         Entity userEntity = ds.prepare(query).asSingleEntity();
         User userid = this.getUser(login);
 
-        Entity twittEntity = new Entity("Twitt");
+        if (userid == null){throw new NullPointerException("User not found");}Entity twittEntity = new Entity("Twitt");
         twittEntity.setProperty("idAuthor", userid.getId());
         twittEntity.setProperty("nameAuthor", login);
         twittEntity.setProperty("message", message);
@@ -115,7 +115,7 @@ public class TinyTwittEndPoint {
         query = new Query("UserFollowers").setAncestor(userEntity.getKey());
         Entity userFollowersEntity = ds.prepare(query).asSingleEntity();
 
-        if (userFollowersEntity == null){throw new EntityNotFoundException(null);}
+        if (userFollowersEntity == null){throw new NullPointerException("No followers found.");}
 
         @SuppressWarnings("unchecked")
         ArrayList<Long> followers = (ArrayList<Long>) userFollowersEntity.getProperty("followers");
@@ -169,89 +169,159 @@ public class TinyTwittEndPoint {
         Collections.sort(result);
         return result;
 
-    }
+	    }
+	 
+	 @ApiMethod(name = "followUser", httpMethod = ApiMethod.HttpMethod.POST)
+	    public void followUser(@Named("follower") String followerLogin, @Named("followed") String followedLogin) {
+	       
+		 DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
+			Collection<Filter> filters = new ArrayList<Filter>();
+			filters.add(new Query.FilterPredicate("login", Query.FilterOperator.EQUAL, followerLogin));
+			filters.add(new Query.FilterPredicate("login", Query.FilterOperator.EQUAL, followedLogin));
+			Filter filter = new Query.CompositeFilter(CompositeFilterOperator.OR, filters);
+			Query query = new Query("User").setFilter(filter);
+			List<Entity> entities = ds.prepare(query).asList(FetchOptions.Builder.withDefaults());
+			
+			if(entities == null){throw new NullPointerException("Entities null");}
+			
+			Entity followed = null;
+			Entity follower = null;
+			
+			for(Entity user : entities){
+				String login = (String) user.getProperty("login");
+				if(login == null){throw new NullPointerException("Login null");}
+				if(login.equals(followedLogin)){followed = user;}
+				else{follower = user;}
+			}
+			
+			if (follower == null){
+				throw new NullPointerException("Follower user not found"+followerLogin);
+			}
+			if(followed == null){
+				throw new NullPointerException("Followed user not found");
+			}
+			
+			query = new Query("UserFollowers").setAncestor(followed.getKey());
+			Entity userFollowers = ds.prepare(query).asSingleEntity();
+			
+			@SuppressWarnings("unchecked")
+			ArrayList<Long> followers = (ArrayList<Long>) userFollowers.getProperty("followers");
+			
+			if(followers == null){followers = new ArrayList<Long>();}
+			
+			if(followers.contains((Long) follower.getKey().getId())){
+				throw new NullPointerException("Already following this user");
+			}else{
+				followers.add((Long) follower.getKey().getId());
+				userFollowers.setProperty("followers", followers);
+				ds.put(userFollowers);
+			}
+	    }
+	 
+	 @ApiMethod(name = "addFollowerUser")
+		public void addFollowerUser(@Named("loginFollowed") String loginFollowedFollower) {
+		 
+			DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
+			Filter filter = new Query.FilterPredicate("login", Query.FilterOperator.EQUAL, loginFollowedFollower);
+			Query query = new Query("User").setFilter(filter);
+			Entity entity = ds.prepare(query).asSingleEntity();
+			
+			if(entity == null){throw new NullPointerException("Entity null");}
+			
+			Entity followed = entity;
+			Entity follower = entity;
+			query = new Query("UserFollowers").setAncestor(followed.getKey());
+			Entity userFollowers = ds.prepare(query).asSingleEntity();
+			
+			
+			@SuppressWarnings("unchecked")
+			ArrayList<Long> followers = (ArrayList<Long>) userFollowers.getProperty("followers");
+			if(followers == null){followers = new ArrayList<Long>();}
+			
+			if(followers.contains((Long) follower.getKey().getId())){
+				throw new NullPointerException("Already following this user");
+			}else{
+				followers.add((Long) follower.getKey().getId());
+				userFollowers.setProperty("followers", followers);
+				ds.put(userFollowers);
+			}
+		}
+	 
+	/* @ApiMethod(name = "existUser",httpMethod = ApiMethod.HttpMethod.GET)
+	    public Boolean existUser(@Named("login") String login) {
+		 
+			DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
+			Filter filter = new Query.FilterPredicate("login",FilterOperator.EQUAL, login);
+			Query query = new Query("User").setFilter(filter);
+			Entity userEntity = ds.prepare(query).asSingleEntity();
+	      
+			if(userEntity == null) {
+	            return false;
+	        }
+	       
+	        return true;
+	    }*/
+	 
+	 @ApiMethod(name = "createNbUsers")
+		public ArrayList<String> createNbUsers(@Named("nbUsers") int nbUsers) {
 
-    /**
-     * The calling user will follow the second user
-     * @param followerLogin the caller's nickname
-     * @param followedLogin the other twitto's nickname
-     */
-    @ApiMethod(name = "followUser", httpMethod = ApiMethod.HttpMethod.POST)
-    public void followUser(@Named("follower") String followerLogin, @Named("followed") String followedLogin) {
+			String chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
 
-        DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
-        Collection<Filter> filters = new ArrayList<Filter>();
-        filters.add(new Query.FilterPredicate("login", Query.FilterOperator.EQUAL, followerLogin));
-        filters.add(new Query.FilterPredicate("login", Query.FilterOperator.EQUAL, followedLogin));
-        Filter filter = new Query.CompositeFilter(CompositeFilterOperator.OR, filters);
-        Query query = new Query("User").setFilter(filter);
-        List<Entity> entities = ds.prepare(query).asList(FetchOptions.Builder.withDefaults());
+			ArrayList<String> listLogin = new ArrayList<>();
 
-        if(entities == null){throw new NullPointerException("Entities null");}
+			String login = "";
+			String email = "";
+			String password = "";
+			String firstname = "";
+			String lastname = "";
+			for(int i = 1; i <= nbUsers; i++){
 
-        Entity followed = null;
-        Entity follower = null;
+				String rand = "";
 
-        for(Entity user : entities){
-            String login = (String) user.getProperty("login");
-            if(login == null){throw new NullPointerException("Login null");}
-            if(login.equals(followedLogin)){followed = user;}
-            else{follower = user;}
-        }
+				for(int j = 1; j <= 10; j++){
+					int k = (int)Math.floor(Math.random() * 62);
+					rand += chars.charAt(k);
+				}
+				login =  "user" + rand;
+				email = "mail" + rand + "@supermail.com";
+				password = "password" + rand;
+				firstname = "firtsname" + rand;
+				lastname = "lastname" + rand;
 
-        if (follower == null){
-            throw new NullPointerException("Follower user not found"+followerLogin);
-        }
-        if(followed == null){
-            throw new NullPointerException("Followed user not found");
-        }
+				createUser(login, email, password, firstname, lastname);
 
-        query = new Query("UserFollowers").setAncestor(followed.getKey());
-        Entity userFollowers = ds.prepare(query).asSingleEntity();
+				listLogin.add(login);
+			}
+			return listLogin;
+	}
 
-        @SuppressWarnings("unchecked")
-        ArrayList<Long> followers = (ArrayList<Long>) userFollowers.getProperty("followers");
+	 @ApiMethod(name = "createNbFollowers")
+		public void createNbFollowers(@Named("nbFollowers") int nbFollowers, @Named("followed") String followed) {
 
-        if(followers == null){followers = new ArrayList<Long>();}
+			DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
+			Filter filter = new Query.FilterPredicate("login", Query.FilterOperator.EQUAL, followed);
+			Query query = new Query("User").setFilter(filter);
+			Entity userEntity = ds.prepare(query).asSingleEntity();
 
-        basicFollow(ds, follower, userFollowers, followers);
-    }
+			if (userEntity == null){
+				throw new NullPointerException("User not found");
+			}
 
-    private void basicFollow(DatastoreService ds, Entity follower, Entity userFollowers, ArrayList<Long> followers) {
-        if(followers.contains((Long) follower.getKey().getId())){
-            throw new NullPointerException("Already following this user");
-        }else{
-            followers.add((Long) follower.getKey().getId());
-            userFollowers.setProperty("followers", followers);
-            ds.put(userFollowers);
-        }
-    }
+			ArrayList<String> listLogin = new ArrayList<>();
+			listLogin = createNbUsers(nbFollowers);
 
-    /**
-     * A method to make a user follow him/herself, so he/she can see his/her tweets
-     * @param loginFollowedFollower the user's nickname
-     */
-    @ApiMethod(name = "addFollowerUser")
-    public void addFollowerUser(@Named("loginFollowed") String loginFollowedFollower) {
+			for(int i = 0; i < listLogin.size(); i++){
+				followUser(followed, listLogin.get(i));
 
-        DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
-        Filter filter = new Query.FilterPredicate("login", Query.FilterOperator.EQUAL, loginFollowedFollower);
-        Query query = new Query("User").setFilter(filter);
-        Entity entity = ds.prepare(query).asSingleEntity();
-
-        if(entity == null){throw new NullPointerException("Entity null");}
-
-        Entity followed = entity;
-        Entity follower = entity;
-        query = new Query("UserFollowers").setAncestor(followed.getKey());
-        Entity userFollowers = ds.prepare(query).asSingleEntity();
-
-
-        @SuppressWarnings("unchecked")
-        ArrayList<Long> followers = (ArrayList<Long>) userFollowers.getProperty("followers");
-        if(followers == null){followers = new ArrayList<Long>();}
-
-        basicFollow(ds, follower, userFollowers, followers);
-    }
+				ArrayList<String> listTwitt = new ArrayList<>();
+				listTwitt.add("The concept of global warming was created by and for the Chinese in order to make U.S. manufacturing non-competitive.");
+				listTwitt.add("Why would Kim Jong-un insult me by calling me \"old,\" when I would NEVER call him \"short and fat?\" Oh well, I try so hard to be his friend - and maybe someday that will happen!");
+				listTwitt.add("It's freezing and snowing in New York--we need global warming!");
+				listTwitt.add("Healthy young child goes to doctor, gets pumped with massive shot of many vaccines, doesn't feel good and changes - AUTISM. Many such cases!");
+				listTwitt.add("An 'extremely credible source' has called my office and told me that @BarackObama's birth certificate is a fraud.");
+				int k = (int)Math.floor(Math.random() * 5);
+				createTwitt(listLogin.get(i),listTwitt.get(k));
+			}
+	}
 
 }
