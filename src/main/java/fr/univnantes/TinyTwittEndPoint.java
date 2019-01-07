@@ -171,6 +171,11 @@ public class TinyTwittEndPoint {
 
     }
 
+    /**
+     * A method to make a twitto follow a user
+     * @param followerLogin the following user
+     * @param followedLogin the user to follow
+     */
     @ApiMethod(name = "followUser", httpMethod = ApiMethod.HttpMethod.POST)
     public void followUser(@Named("follower") String followerLogin, @Named("followed") String followedLogin) {
 
@@ -222,6 +227,10 @@ public class TinyTwittEndPoint {
         }
     }
 
+    /**
+     * A method to make a twitto follow him/herself so that he/she can see his/her tweets
+     * @param loginFollowedFollower the user to self-follow
+     */
     @ApiMethod(name = "addFollowerUser")
     public void addFollowerUser(@Named("loginFollowed") String loginFollowedFollower) {
 
@@ -244,21 +253,6 @@ public class TinyTwittEndPoint {
 
         basicFollow(ds, follower, userFollowers, followers);
     }
-
-	/* @ApiMethod(name = "existUser",httpMethod = ApiMethod.HttpMethod.GET)
-	    public Boolean existUser(@Named("login") String login) {
-
-			DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
-			Filter filter = new Query.FilterPredicate("login",FilterOperator.EQUAL, login);
-			Query query = new Query("User").setFilter(filter);
-			Entity userEntity = ds.prepare(query).asSingleEntity();
-
-			if(userEntity == null) {
-	            return false;
-	        }
-
-	        return true;
-	    }*/
 
     /**
      * Test method  to create a lot of users
