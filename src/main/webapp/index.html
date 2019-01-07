@@ -89,19 +89,23 @@
 						</div>
                             
                         <!-- Button for test -->
-                         <form novalidate ng-submit="twittnbfollowers(nom)"
-							style="background-color: #E6D5CA; border: 1px #F5EEEA solid; padding: 5px" ng-hide="log">
-                            <label>Test de l'envoie de 1 twitt pour 100,1000,5000 followers :</label>
+                         <form novalidate ng-submit="twittnbfollowers(pseudon,nbfollowerstest)"
+							style="background-color: #E6D5CA; border: 1px #F5EEEA solid; padding: 5px" >
+                            <label>Test de l'envoie de 1 twitt pour 100, 1000, 5000 followers :</label>
                             <input type="text" class="form-control"
-                                    ng-model="nom" placeholder="Pseudo">
+                                    ng-model="pseudon" placeholder="Pseudo">
                              <input type="text" class="form-control"
-							         ng-model="nbfollowers" placeholder="nb">
+							         ng-model="nbfollowerstest" placeholder="nb">
                             <button type="submit" class="btn btn-default">Test</button>
                             <label><br />Resultat : {{tnbfollowers}}</label>
+                            <div class="col-md-12" style="background-color: #E6D5CA; border: 1px #F5EEEA solid; padding: 5px">
+					            <p>{{listtemps}} </p>
+				             </div>
+                            
                            
                         </form>
 
-                        
+
 
                         <!-- Button for show timeline of a user -->
 					<div>

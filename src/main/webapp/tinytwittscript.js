@@ -12,6 +12,7 @@ app.controller('TController',['$scope','$window', function($scope,$window) {
 	$scope.userfirstname='';
     $scope.userlastname ='';
     $scope.tnbfollowers = 0;
+    $scope.listtemps = [];
     
 
     $scope.register = function(){
@@ -126,26 +127,53 @@ app.controller('TController',['$scope','$window', function($scope,$window) {
         }
     }
     
-    $scope.twittnbfollowers = function(nom,nb){
-
+    $scope.twittnbfollowers = function(pseudon,nbfollowerstest){
+                    $scope.listtemps = [];
+                     console.log("resp avant createNBfollowers");
                     gapi.client.tinytwittAPI.createNbFollowers({
-                        nbFollowers: nb,
-                        followed: nom
-                    }).execute(function(resp){
+                        nbFollowers: nbfollowerstest,
+                        followed: pseudon
+                    });
 
-                        $scope.start = new Date().getTime();
-                        for(var i=0;i<30;i++){
-                            gapi.client.tinytwittAPI.createTwitt({
-                                login: nom,
-                                message: 'test'
-                            }).execute(function(resp){
+                        
+                        
+                       if(nbfollowerstest<=100){
+                        
+                            for(var i=0;i<30;i++){
+                                $scope.start = new Date().getTime();
+                                gapi.client.tinytwittAPI.createTwitt({
+                                    login: pseudon,
+                                    message: 'test'
+                                }).execute(function(respa){
+                                    $scope.stop = new Date().getTime();
+                                var res =  $scope.stop - $scope.start;
+                                $scope.listtemps.push(res);
+                                 console.log(res);
+                                 $scope.tnbfollowers =  $scope.tnbfollowers + res;
+                                  $scope.$apply();
+                                })
+                                
+                            }
+                            $scope.tnbfollowers = $scope.tnbfollowers/30;
+                            
+                        }else{
 
-                            })
+                            $scope.start = new Date().getTime();
+                            
+                                gapi.client.tinytwittAPI.createTwitt({
+                                    login: pseudon,
+                                    message: 'test'
+                                }).execute(function(respz){
+                                     $scope.stop = new Date().getTime();   
+                            $scope.tnbfollowers = ($scope.stop - $scope.start);
+                                      $scope.$apply();
+                               })
+                            
+                           
+
                         }
-                        $scope.stop = new Date().getTime();   
-                        $scope.tnbfollowers = ($scope.stop - $scope.start)/30;
-                    })
-
+                  
+                        
     }
 
     $window.init = function() {
