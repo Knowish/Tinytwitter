@@ -178,47 +178,127 @@ app.controller('TController',['$scope','$window', function($scope,$window) {
                   
                         
     }
-/*
-    $scope.twittgetlastten = function(pseudal,nbfollowerstestten) {
+
+    $scope.twittgetlast10 = function(pseudal10,nbfollowerstest10) {
     	 console.log("resp avant createNBfollowers");
          gapi.client.tinytwittAPI.createNbFollowers({
-             nbFollowers: nbfollowerstestten,
-             followed: pseudal
+             nbFollowers: nbfollowerstest10,
+             followed: pseudal10
          });
          
          for (var i=0; i<15; i++) {
         	 gapi.client.tinytwittAPI.createTwitt({
-                 login: pseudal,
+                 login: pseudal10,
                  message: 'test'
              });
          }
          
-         $scope.lasttentweets = [];
+         $scope.last10tweets = [];
 
          gapi.client.tinytwittAPI.getTimeline({
-             login: pseudal
+             login: pseudal10
          }).execute(function(resp){
              console.log(resp);
              if(resp.code != 503){
                  if(resp.items.length > 0){
 
                      for(var i = 0; i < 10; i++){
-                                 $scope.lasttentweets.push({author: resp.items[i].nameAuthor, message: resp.items[i].message, date : resp.items[i].date});
+                                 $scope.last10tweets.push({author: resp.items[i].nameAuthor, message: resp.items[i].message, date : resp.items[i].date});
                              }
 
                  }else{
-                     $scope.lasttentweets.push({author: "admin", message: "No tweet for this user", date : "Now"});
+                     $scope.last10tweets.push({author: "admin", message: "No tweet for this user", date : "Now"});
                      console.log("No tweet for this user");
                  }
                  
              }else{
            
-             $scope.lasttentweets.push({author: "admin", message: "No user found", date : "Now"});
+             $scope.last10tweets.push({author: "admin", message: "No user found", date : "Now"});
              }
              $scope.$apply();
          })
     }
-  */
+    
+    $scope.twittgetlast50 = function(pseudal50,nbfollowerstest50) {
+   	 console.log("resp avant createNBfollowers");
+        gapi.client.tinytwittAPI.createNbFollowers({
+            nbFollowers: nbfollowerstest50,
+            followed: pseudal50
+        });
+        
+        for (var i=0; i<55; i++) {
+       	 gapi.client.tinytwittAPI.createTwitt({
+                login: pseudal50,
+                message: 'test'
+            });
+        }
+        
+        $scope.last50tweets = [];
+
+        gapi.client.tinytwittAPI.getTimeline({
+            login: pseudal50
+        }).execute(function(resp){
+            console.log(resp);
+            if(resp.code != 503){
+                if(resp.items.length > 0){
+
+                    for(var i = 0; i < 50; i++){
+                                $scope.last50tweets.push({author: resp.items[i].nameAuthor, message: resp.items[i].message, date : resp.items[i].date});
+                            }
+
+                }else{
+                    $scope.last50tweets.push({author: "admin", message: "No tweet for this user", date : "Now"});
+                    console.log("No tweet for this user");
+                }
+                
+            }else{
+          
+            $scope.last50tweets.push({author: "admin", message: "No user found", date : "Now"});
+            }
+            $scope.$apply();
+        })
+   }
+    
+    $scope.twittgetlast100 = function(pseudal100,nbfollowerstest100) {
+   	 console.log("resp avant createNBfollowers");
+        gapi.client.tinytwittAPI.createNbFollowers({
+            nbFollowers: nbfollowerstest100,
+            followed: pseudal100
+        });
+        
+        for (var i=0; i<105; i++) {
+       	 gapi.client.tinytwittAPI.createTwitt({
+                login: pseudal100,
+                message: 'test'
+            });
+        }
+        
+        $scope.last100tweets = [];
+
+        gapi.client.tinytwittAPI.getTimeline({
+            login: pseudal100
+        }).execute(function(resp){
+            console.log(resp);
+            if(resp.code != 503){
+                if(resp.items.length > 0){
+
+                    for(var i = 0; i < 100; i++){
+                                $scope.last100tweets.push({author: resp.items[i].nameAuthor, message: resp.items[i].message, date : resp.items[i].date});
+                            }
+
+                }else{
+                    $scope.last100tweets.push({author: "admin", message: "No tweet for this user", date : "Now"});
+                    console.log("No tweet for this user");
+                }
+                
+            }else{
+          
+            $scope.last100tweets.push({author: "admin", message: "No user found", date : "Now"});
+            }
+            $scope.$apply();
+        })
+   }
+  
    /* $scope.twittgetlastten = function(pseudal,nbfollowerstestten) {
     	gapi.client.tinytwittAPI.createNbFollowers({
             nbFollowers: nbfollowerstestten,

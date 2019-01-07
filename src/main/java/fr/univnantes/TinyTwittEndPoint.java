@@ -330,20 +330,6 @@ public class TinyTwittEndPoint {
             createTwitt(listLogin.get(i),listTwitt.get(k));
         }
     }
-    
-    /**
-     * 
-     */
-    
-    @ApiMethod(name = "getLastTens")
-    public List<Twitt> getLastTens(@Named("login") String login) {
-    	lastTens = null;
-		for (int i = 0; i < 10; ++i) {
-			lastTens.add(getTimeline(login).get(i));
-		}
-		return lastTens;
-    	
-    }
 
 
 }
