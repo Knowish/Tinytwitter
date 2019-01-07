@@ -223,26 +223,7 @@ public class TinyTwittEndPoint {
 				ds.put(userFollowers);
 			}
 		}
+
 	 
-	/* @ApiMethod(name = "existUser",httpMethod = ApiMethod.HttpMethod.GET)
-	    public Boolean existUser(@Named("login") String login) {
-		 
-			DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
-			Filter filter = new Query.FilterPredicate("login",FilterOperator.EQUAL, login);
-			Query query = new Query("User").setFilter(filter);
-			Entity userEntity = ds.prepare(query).asSingleEntity();
-	      
-			if(userEntity == null) {
-	            return false;
-	        }
-	       
-	        return true;
-	    }*/
-	 
-	 
-	@ApiMethod(name ="retourneUn")
-	public void retournTaDaronne() {
-		String a = "TaDaronne dans l'API";
-	}
 
 }
