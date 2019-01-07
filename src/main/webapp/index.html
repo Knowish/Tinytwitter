@@ -8,10 +8,11 @@
     <title>Tiny Twitt</title>
   </head>
 
-  <body ng-controller="TController" style="background-color: #3a547c">
-    <h1>Hello App Engine! ta daronne</h1>
-  
-   <table>
+  <body ng-controller="TController" style="background-color: #00aced">
+    <h1>Tiny Twitter</h1>
+  <div class="container" style="padding-top: 16px">
+		<div class="row">
+ <!--   <table>
       <tr>
         <td colspan="2" style="font-weight:bold;">Available Servlets:</td>        
       </tr>
@@ -19,91 +20,94 @@
         <td><a href="/TinyTwitt">The servlet</a></td>
       </tr>
     </table>
-
+-->
     <!-- Button for creating a new account -->
-						<form novalidate ng-submit="inscription()"
-							style="border: 1px blue solid; padding: 5px" ng-hide="log">
+						<form novalidate ng-submit="register()"
+							style="background-color: #E6D5CA; border: 1px #F5EEEA solid; padding: 5px" ng-hide="log">
 							<div class="form-group">
-								<label>Utilisateur: <input type="text"
+								<label>User : <input type="text"
 									placeholder="User" class="form-control"
-									ng-model="userlogin"></label> <label>Mail: <input
+									ng-model="userlogin"></label> <label>Email: <input
 									type="text" placeholder="Email" class="form-control"
-									ng-model="usermail"></label> <label>Mdp: <input
+									ng-model="usermail"></label> <label>Password: <input
 									type="password" placeholder="Password" class="form-control"
-									ng-model="userpw"></label> <label>Prenom: <input
+									ng-model="userpw"></label> <label>Firstname: <input
 									type="text" placeholder="Firstname" class="form-control"
-									ng-model="userfirstname"></label> <label>Nom: <input
+									ng-model="userfirstname"></label> <label>Lastname: <input
 									type="text" placeholder="Lastname" class="form-control"
 									ng-model="userlastname"></label>
 							</div>
-							<button type="submit" class="btn btn-default">INSCRIT TOI ON TE DIT</button>
+							<button type="submit" class="btn btn-default">Register now</button>
 						</form>
     
 
         <!-- Button for connecting to your account -->
-						<form novalidate ng-submit="connection(login)"
-							style="border: 1px blue solid; padding: 5px" ng-hide="log">
+						<form novalidate ng-submit="connexion(login)"
+							style="background-color: #E6D5CA; border: 1px #F5EEEA solid; padding: 5px" ng-hide="log">
 							<div class="form-group">
-								<label>Utilisateur:</label> <input type="text"
+								<label>User :</label> <input type="text"
 									placeholder="Pseudo" class="form-control" ng-model="login">
 							</div>
 							
-							<button type="submit" class="btn btn-default">C'est moi</button>
+							<button type="submit" class="btn btn-default">Sign In</button>
                         </form>
                         
-
+                        <!-- Button for deconnecting to your account -->
+						<form ng-submit="deconnexion()" ng-show="log">
+							<div>
+								<button type="submit" class="btn btn-default">Sign Out</button>
+							</div>
+                        </form> 
+                        
                          <!-- Button for making a tweet -->
 						<div class="col-md-12">
                             <h3 ng-show="!log"><font color="red">Please connect</font></h3>
 							<h3 ng-show="log">
-                                <form class="form-inline" ng-submit="postTwitt()">
-								<label class="sr-only" for="inlineFormInputTwitt">userlogin</label> <input
-									type="text" class="form-control col-md-10 mb-2 mr-sm-2 mb-sm-0" placeholder="Truite FDP"
+                                <form class="form-inline" ng-submit="postTwitt()" style="background-color: #E6D5CA; border: 1px #F5EEEA solid; padding: 5px" ng-show="log">
+                                    <p>{{login}} connected.</p>
+								<label class="sr-only" for="inlineFormInputTwitt">Tweet :</label> <input
+									type="text" class="form-control col-md-10 mb-2 mr-sm-2 mb-sm-0" placeholder="Tweet"
 									ng-model="message">
-								<button type="submit" class="btn btn-primary">Tuit FDP</button>
+								<button type="submit" class="btn btn-primary">Tweeter</button>
                             </form>
                         </h3>
                         </div>
                    
                         
 					
-						<!-- Button for deconnecting to your account -->
-						<form ng-submit="deconnexion()" ng-show="log">
-							<div>
-								<button type="submit" class="btn btn-default">Deconnexion</button>
-							</div>
-						</form>
+						
 
                         <!-- Button for follow a user -->
 						<div class="col-md-3">
-				            <form ng-submit="follow(followed)" style="border: 1px blue solid; padding: 5px" ng-show="log">
+				            <form ng-submit="follow(followed)" style="background-color: #E6D5CA; border: 1px #F5EEEA solid; padding: 5px" ng-show="log">
 					            <div class="form-group">
-						            <label>Suivre:</label> <input type="text" class="form-control"
+						            <label>Follow who? :</label> <input type="text" class="form-control"
 							        ng-model="followed" placeholder="Pseudo">
 					            </div>
-					             <button type="submit" class="btn btn-default">ATTACK</button>
+					             <button type="submit" class="btn btn-default">Follow</button>
                              </form>
 						</div>
 							
                         <!-- Button for show timeline of a user -->
 					<div>
-						<div class="col-md-12">
+						<div class="col-md-12"  style="background-color: #F5EEEA">
 							<form class="form-inline" ng-submit="timeline(search)">
 								<label>Name of the user timeline to search:</label> <input type="text"
-									placeholder="Pseudo du gars recherche" class="form-control" ng-model="search">
-								<button type="submit" class="btn btn-primary">cherche salope</button>
+									placeholder="Pseudo" class="form-control" ng-model="search">
+								<button type="submit" class="btn btn-primary">search</button>
 							</form>
                         </div>
 
-                        <div class="col-md-12" style="border: 1px blue solid; padding: 5px"
-					ng-repeat="x in listtwitt">
-					<p>{{x.author}} à écrit le {{x.date}} :</p>
+                        <div class="col-md-12" style="background-color: #E6D5CA; border: 1px #F5EEEA solid; padding: 5px"
+					 ng-repeat="x in listtwitt">
+					<p>{{x.author}} wrote on {{x.date}} :</p>
 					<p>{{x.message}}</p>
-				</div>
+				        </div>
                     </div>
     
 
-						
+			</div>
+    </div>			
 
 						
 

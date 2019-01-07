@@ -1,8 +1,9 @@
 var app = angular.module('TinyTwitt', []);
 app.controller('TController',['$scope','$window', function($scope,$window) {
     
-    $scope.listtwitt = [{author: 'admin',message :'Bienvenu sur tiny twitt FDP'}];
+    $scope.listtwitt = [{author: 'admin',message :'Hello and Welcome to Tiny Tweet'}];
     $scope.author = '';
+    $scope.login ='';
     $scope.message;
     $scope.log = false;
     $scope.userlogin ='';
@@ -10,10 +11,9 @@ app.controller('TController',['$scope','$window', function($scope,$window) {
 	$scope.userpw ='';
 	$scope.userfirstname='';
     $scope.userlastname ='';
-    $scope.erreurLog=false;
     
 
-    $scope.inscription = function(){
+    $scope.register = function(){
         console.log("inscription passe? avant if v3");
 		if($scope.log == false){
             console.log("inscription passe? apres if v3");
@@ -25,11 +25,14 @@ app.controller('TController',['$scope','$window', function($scope,$window) {
 				firstname: $scope.userfirstname,
 				lastname: $scope.userlastname
 			}).execute(function(resp){
-				console.log(resp);
-				$scope.author = $scope.userlogin;
-				$scope.log = true;
-				console.log($scope.author);
-				console.log(" is connected");
+                console.log(resp);
+                if(resp != null){
+                    $scope.login = $scope.userlogin;
+                    $scope.author = $scope.userlogin;
+                    $scope.log = true;
+                    console.log($scope.author);
+                    console.log(" is connected");
+                }
 			});
         }
     }
@@ -54,9 +57,10 @@ app.controller('TController',['$scope','$window', function($scope,$window) {
                     console.log("No tweet for this user");
                 }
                 
-            }
+            }else{
           
             $scope.listtwitt.push({author: "admin", message: "No user found", date : "Now"});
+            }
             $scope.$apply();
         })
     }
@@ -74,7 +78,7 @@ app.controller('TController',['$scope','$window', function($scope,$window) {
         }
     }
 
-    $scope.connection = function(nom){
+    $scope.connexion = function(nom){
 
         gapi.client.tinytwittAPI.getUser({
             login: nom
@@ -83,9 +87,7 @@ app.controller('TController',['$scope','$window', function($scope,$window) {
             if(resp.login == nom){
                 $scope.login = nom;
                 $scope.author = $scope.login;
-                /*$scope.listTwitt();*/
                 $scope.log = true;
-                $scope.erreurLog=false;
                 console.log($scope.author);
                 console.log(" is connected");
             }else{
@@ -100,7 +102,6 @@ app.controller('TController',['$scope','$window', function($scope,$window) {
 		$scope.login = '';
 		$scope.author = '';
 		$scope.log = false;
-        $scope.erreurLog=false;
 		$scope.listtwitt = [{author: 'admin',message :'Bienvenu sur tiny twitt'}];
 		console.log(" is deconnected");
 	}

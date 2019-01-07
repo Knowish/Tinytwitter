@@ -20,8 +20,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/fr/univnantes/TinyTwittEndPoint.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="799">
-              <caret line="55" column="9" selection-start-line="55" selection-start-column="9" selection-end-line="55" selection-end-column="9" />
+            <state relative-caret-position="867">
+              <caret line="59" column="9" selection-start-line="59" selection-start-column="9" selection-end-line="59" selection-end-column="9" />
             </state>
           </provider>
         </entry>
@@ -294,7 +294,6 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="949" y="2" width="974" height="1047" extended-state="0" />
-    <editor active="true" />
     <layout>
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.285558" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -353,8 +352,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/fr/univnantes/TinyTwittEndPoint.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="799">
-          <caret line="55" column="9" selection-start-line="55" selection-start-column="9" selection-end-line="55" selection-end-column="9" />
+        <state relative-caret-position="867">
+          <caret line="59" column="9" selection-start-line="59" selection-start-column="9" selection-end-line="59" selection-end-column="9" />
         </state>
       </provider>
     </entry>
