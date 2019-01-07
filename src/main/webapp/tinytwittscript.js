@@ -11,6 +11,7 @@ app.controller('TController',['$scope','$window', function($scope,$window) {
 	$scope.userpw ='';
 	$scope.userfirstname='';
     $scope.userlastname ='';
+    $scope.tnbfollowers = 0;
     
 
     $scope.register = function(){
@@ -26,7 +27,7 @@ app.controller('TController',['$scope','$window', function($scope,$window) {
 				lastname: $scope.userlastname
 			}).execute(function(resp){
                 console.log(resp);
-                if(resp != null){
+                if(resp.code != 503){
                     $scope.login = $scope.userlogin;
                     $scope.author = $scope.userlogin;
                     $scope.log = true;
@@ -45,7 +46,7 @@ app.controller('TController',['$scope','$window', function($scope,$window) {
             login: nom
         }).execute(function(resp){
             console.log(resp);
-            if(resp != null){
+            if(resp.code != 503){
                 if(resp.items.length > 0){
 
                     for(var i = 0; i < resp.items.length; i++){
@@ -93,6 +94,7 @@ app.controller('TController',['$scope','$window', function($scope,$window) {
             }else{
                 console.log(" User dont exist");
             }
+             $scope.$apply();
         })
         
         
@@ -124,6 +126,27 @@ app.controller('TController',['$scope','$window', function($scope,$window) {
         }
     }
     
+    $scope.twittnbfollowers = function(nom,nb){
+
+                    gapi.client.tinytwittAPI.createNbFollowers({
+                        nbFollowers: nb,
+                        followed: nom
+                    }).execute(function(resp){
+
+                        $scope.start = new Date().getTime();
+                        for(var i=0;i<30;i++){
+                            gapi.client.tinytwittAPI.createTwitt({
+                                login: nom,
+                                message: 'test'
+                            }).execute(function(resp){
+
+                            })
+                        }
+                        $scope.stop = new Date().getTime();   
+                        $scope.tnbfollowers = ($scope.stop - $scope.start)/30;
+                    })
+
+    }
 
     $window.init = function() {
         	    console.log("windowinit called");
