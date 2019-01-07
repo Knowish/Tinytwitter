@@ -1,9 +1,10 @@
 # Tiny Twitter
+# Par Raphaël Pagé, Henri Bouvet, Alexandre Melo, et Glenn Plouhinec
 
-https://tinitouit.appspot.com/
+https://tinitouit.appspot.com/  
 https://tinitouit.appspot.com/_ah/api/explorer
 
-BACK END 
+#BACK END 
 
 Pour ce projet nous avons créé 2 beans correspondant aux entités principales: Twitt et User. Elles définissent respectivement les messages publiés par un utilisateur, et les utilisateurs eux-mêmes. 
 
@@ -16,8 +17,9 @@ Le fonctionnement des méthodes de l'API aurait été similaire dans le sens où
 Nous n'avons pas utilisé Objectify car nous n'avons pas réussi à faire fonctionner l'API avec cette bibliothèque, mais son utilisation aurait été fort pratique car cela nous aurait évité de devenir chauve à force de nous arracher les cheveux, et nous aurait économisé bon nombre de lignes de code.
 
 
-FRONT END
- Pour la methode init dans le fichier tinytwitt.js, un camarade de l'année derniere nous à aigué pour l'ecrire puisque nous n'avions pas réussi à la faire fonctionner .
+#FRONT END
+
+Pour la methode init dans le fichier tinytwitt.js, un camarade de l'année dernière nous à aidé à l'écrire puisque nous n'avions pas réussi à la faire fonctionner.
  
 Mesures de temps moyen (30 mesures) pour l'exécution d'une série d'opérations :
 (On ne prend pas la dernière valeur des mesures, car trop aberrante...)
