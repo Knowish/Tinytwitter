@@ -306,7 +306,8 @@ public class TinyTwittEndPoint {
         Entity userEntity = ds.prepare(query).asSingleEntity();
 
         if (userEntity == null){
-            throw new NullPointerException("User not found");
+            //throw new NullPointerException("User not found");
+            createUser(followed, followed+"@mail.com", followed +"IncrediblePassword","Etienne-Eudes","Durand");
         }
 
         ArrayList<String> listLogin = new ArrayList<>();
@@ -334,8 +335,9 @@ public class TinyTwittEndPoint {
         Query query = new Query("User").setFilter(filter);
         Entity userEntity = ds.prepare(query).asSingleEntity();
 
-        if (userEntity == null){
-            throw new NullPointerException("User not found");
+        if (userEntity == null) {
+            //throw new NullPointerException("User not found");
+            createUser(login, login+"@mail.com", login +"VeryStrongPassword","Jean-Michel","Automatique");
         }
 
         for(int i = 0; i < nbTwitt; i++){
