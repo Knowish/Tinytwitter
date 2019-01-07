@@ -27,8 +27,10 @@ import com.google.appengine.api.datastore.Query.FilterOperator;
 import fr.univnantes.User;
 @Api(name = "tinytwittAPI",namespace = @ApiNamespace(ownerDomain = "mycompany.com", ownerName = "mycompany.com", packagePath = "services"))
 public class TinyTwittEndPoint {
+	
+	private List<Twitt> lastTens;
 
-    /**
+	/**
      * Creates a new user in the datastore with several informations related to connection
      * @param login the chosen nickname
      * @param email the user's email
@@ -167,6 +169,7 @@ public class TinyTwittEndPoint {
         }
 
         Collections.sort(result);
+        Collections.reverse(result);
         return result;
 
     }
@@ -292,6 +295,7 @@ public class TinyTwittEndPoint {
         return listLogin;
     }
 
+ 
     /**
      * Test method to add a lot of followers to a specified account
      * @param nbFollowers the number of followers to add
@@ -306,7 +310,8 @@ public class TinyTwittEndPoint {
         Entity userEntity = ds.prepare(query).asSingleEntity();
 
         if (userEntity == null){
-            throw new NullPointerException("User not found");
+            //throw new NullPointerException("User not found");
+            createUser(followed, followed+"@mail.com", followed +"IncrediblePassword","Etienne-Eudes","Durand");
         }
 
         ArrayList<String> listLogin = new ArrayList<>();
@@ -325,5 +330,20 @@ public class TinyTwittEndPoint {
             createTwitt(listLogin.get(i),listTwitt.get(k));
         }
     }
+    
+    /**
+     * 
+     */
+    
+    @ApiMethod(name = "getLastTens")
+    public List<Twitt> getLastTens(@Named("login") String login) {
+    	lastTens = null;
+		for (int i = 0; i < 10; ++i) {
+			lastTens.add(getTimeline(login).get(i));
+		}
+		return lastTens;
+    	
+    }
+
 
 }

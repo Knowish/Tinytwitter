@@ -12,6 +12,7 @@ app.controller('TController',['$scope','$window', function($scope,$window) {
 	$scope.userfirstname='';
     $scope.userlastname ='';
     $scope.tnbfollowers = 0;
+    $scope.listtemps = [];
     
 
     $scope.register = function(){
@@ -33,6 +34,7 @@ app.controller('TController',['$scope','$window', function($scope,$window) {
                     $scope.log = true;
                     console.log($scope.author);
                     console.log(" is connected");
+                    $scope.$apply();
                 }
 			});
         }
@@ -94,7 +96,7 @@ app.controller('TController',['$scope','$window', function($scope,$window) {
             }else{
                 console.log(" User dont exist");
             }
-             $scope.$apply();
+            $scope.$apply();
         })
         
         
@@ -125,58 +127,135 @@ app.controller('TController',['$scope','$window', function($scope,$window) {
             });
         }
     }
-
+    
     $scope.twittnbfollowers = function(pseudon,nbfollowerstest){
+    				var tmp = 0;
+                    $scope.listtemps = [];
+                     console.log("resp avant createNBfollowers");
+                    gapi.client.tinytwittAPI.createNbFollowers({
+                        nbFollowers: nbfollowerstest,
+                        followed: pseudon
+                    });
 
-        console.log("resp avant createNBfollowers");
-        gapi.client.tinytwittAPI.createNbFollowers({
-            nbFollowers: nbfollowerstest,
-            followed: pseudon
-        }).execute(function(resp){
-            console.log("resp apres createNBfollowers");
-            console.log(resp);
+                        
+                        
+                       if(nbfollowerstest<=10000){
+                        
+                            for(var i=0;i<30;i++){
+                                $scope.start = new Date().getTime();
+                                gapi.client.tinytwittAPI.createTwitt({
+                                    login: pseudon,
+                                    message: 'test'
+                                }).execute(function(respa){
+                                    $scope.stop = new Date().getTime();
+                                var res =  $scope.stop - $scope.start;
+                                $scope.listtemps.push(res);
+                                 console.log(res);
+                                 tmp =  tmp + res;
+                           		 $scope.tnbfollowers = tmp/i;
+                                 $scope.$apply();
+                                 
+                                })
+                                
+                            }
+                            
+                        }else{
 
-            if(nbfollowerstest<=100){
+                            $scope.start = new Date().getTime();
+                            
+                                gapi.client.tinytwittAPI.createTwitt({
+                                    login: pseudon,
+                                    message: 'test'
+                                }).execute(function(respz){
+                                     $scope.stop = new Date().getTime();   
+                            $scope.tnbfollowers = ($scope.stop - $scope.start);
+                                      $scope.$apply();
+                               })
+                            
+                           
 
-                for(var i=0;i<30;i++){
-                    $scope.start = new Date().getTime();
-                    gapi.client.tinytwittAPI.createTwitt({
-                        login: pseudon,
-                        message: 'test'
-                    }).execute(function(resp){
-
-                    })
-                    $scope.stop = new Date().getTime();
-                    var res =  $scope.stop - $scope.start;
-                    console.log(res);
-                    $scope.listtemps.push(res);
-                }
-                for(var j=0;j<30;j++){
-                    $scope.tnbfollowers = $scope.tnbfollowers + $scope.listtemps.items[j];
-                }
-                $scope.tnbfollowers = $scope.tnbfollowers/30;
-            }else{
-
-                $scope.start = new Date().getTime();
-
-                gapi.client.tinytwittAPI.createTwitt({
-                    login: pseudon,
-                    message: 'test'
-                }).execute(function(resp){
-
-
-                })
-
-                $scope.stop = new Date().getTime();
-                $scope.tnbfollowers = ($scope.stop - $scope.start);
-
-            }
-
-        })
-
-
+                        }
+                  
+                        
     }
+/*
+    $scope.twittgetlastten = function(pseudal,nbfollowerstestten) {
+    	 console.log("resp avant createNBfollowers");
+         gapi.client.tinytwittAPI.createNbFollowers({
+             nbFollowers: nbfollowerstestten,
+             followed: pseudal
+         });
+         
+         for (var i=0; i<15; i++) {
+        	 gapi.client.tinytwittAPI.createTwitt({
+                 login: pseudal,
+                 message: 'test'
+             });
+         }
+         
+         $scope.lasttentweets = [];
 
+         gapi.client.tinytwittAPI.getTimeline({
+             login: pseudal
+         }).execute(function(resp){
+             console.log(resp);
+             if(resp.code != 503){
+                 if(resp.items.length > 0){
+
+                     for(var i = 0; i < 10; i++){
+                                 $scope.lasttentweets.push({author: resp.items[i].nameAuthor, message: resp.items[i].message, date : resp.items[i].date});
+                             }
+
+                 }else{
+                     $scope.lasttentweets.push({author: "admin", message: "No tweet for this user", date : "Now"});
+                     console.log("No tweet for this user");
+                 }
+                 
+             }else{
+           
+             $scope.lasttentweets.push({author: "admin", message: "No user found", date : "Now"});
+             }
+             $scope.$apply();
+         })
+    }
+  */
+   /* $scope.twittgetlastten = function(pseudal,nbfollowerstestten) {
+    	gapi.client.tinytwittAPI.createNbFollowers({
+            nbFollowers: nbfollowerstestten,
+            followed: pseudal
+        });
+    	for (var i=0; i<15; i++) {
+       	 gapi.client.tinytwittAPI.createTwitt({
+                login: pseudal,
+                message: 'test'
+            });
+        }
+    	$scope.lasttentweets = [];
+    	
+    	gapi.client.tinytwittAPI.getLastTens({
+    		login: pseudal
+    	}).execute(function(resp){
+            console.log(resp);
+            if(resp.code != 503){
+                if(resp.items.length > 0){
+
+                    for(var i = 0; i < resp.items.length; i++){
+                                $scope.lasttentweets.push({author: resp.items[i].nameAuthor, message: resp.items[i].message, date : resp.items[i].date});
+                            }
+
+                }else{
+                    $scope.lasttentweets.push({author: "admin", message: "No tweet for this user", date : "Now"});
+                    console.log("No tweet for this user");
+                }
+                
+            }else{
+          
+            $scope.lasttentweets.push({author: "admin", message: "No user found", date : "Now"});
+            }
+            $scope.$apply();
+        })
+    }*/
+    
     $window.init = function() {
         	    console.log("windowinit called");
           var rootApi = 'https://tinitouit.appspot.com/_ah/api/';

@@ -8,7 +8,7 @@
     <title>Tiny Twitt</title>
   </head>
 
-  <body ng-controller="TController" style="background-color: #00aced">
+  <body ng-controller="TController" style="background-color: #00aced; font-family: Comic sans MS">
     <h1>Tiny Twitter</h1>
   <div class="container" style="padding-top: 16px">
 		<div class="row">
@@ -89,19 +89,38 @@
 						</div>
                             
                         <!-- Button for test -->
-                         <form novalidate ng-submit="twittnbfollowers(nom)"
-							style="background-color: #E6D5CA; border: 1px #F5EEEA solid; padding: 5px" ng-hide="log">
-                            <label>Test de l'envoie de 1 twitt pour 100,1000,5000 followers :</label>
+                         <form novalidate ng-submit="twittnbfollowers(pseudon,nbfollowerstest)"
+							style="background-color: #E6D5CA; border: 1px #F5EEEA solid; padding: 5px" >
+                            <label>Test de l'envoi de 1 twitt pour 100, 1000, 5000 followers :</label>
                             <input type="text" class="form-control"
-                                    ng-model="nom" placeholder="Pseudo">
+                                    ng-model="pseudon" placeholder="Pseudo">
                              <input type="text" class="form-control"
-							         ng-model="nbfollowers" placeholder="nb">
+							         ng-model="nbfollowerstest" placeholder="nb">
                             <button type="submit" class="btn btn-default">Test</button>
-                            <label><br />Resultat : {{tnbfollowers}}</label>
-                           
+                            <label><br />Résultat : {{tnbfollowers}}</label>
+                            <div class="col-md-12" style="background-color: #E6D5CA; border: 1px #F5EEEA solid; padding: 5px">
+					            <p>{{listtemps}} </p>
+				             </div>
                         </form>
-
                         
+                        <!-- Button for test -->
+                         <!--<form novalidate ng-submit="twittgetlastten(pseudon,nbfollowerstest)"
+							style="background-color: #E6D5CA; border: 1px #F5EEEA solid; padding: 5px" >
+                            <label>Test de la récupération des 10 derniers tweets pour 100, 1000, 5000 followers :</label>
+                            <input type="text" class="form-control"
+                                    ng-model="pseudal" placeholder="Pseudo">
+                             <input type="text" class="form-control"
+							         ng-model="nbfollowerstestten" placeholder="nb">
+                            <button type="submit" class="btn btn-default">Test</button>
+                            <label><br />Resultat :</label>
+                            <div class="col-md-12" style="background-color: #E6D5CA; border: 1px #F5EEEA solid; padding: 5px"
+                            ng-repeat="x in lasttentweets">
+					<p>{{x.author}} wrote on {{x.date}} :</p>
+					<p>{{x.message}}</p>
+				        </div>
+                    </div>-->
+
+
 
                         <!-- Button for show timeline of a user -->
 					<div>
