@@ -77,7 +77,7 @@ public class TinyTwittEndPoint {
     }
 	
 	 @ApiMethod(name = "createTwitt", httpMethod = ApiMethod.HttpMethod.POST)
-	    public void createTwitt(@Named("login") String login, @Named("message") String message) throws EntityNotFoundException {
+	    public void createTwitt(@Named("login") String login, @Named("message") String message) {
 	        //User twittos = ofy().load().type(User.class).filter("login", login).first().now();
 		 	
 		 	DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
@@ -85,6 +85,8 @@ public class TinyTwittEndPoint {
 			Query query = new Query("User").setFilter(filter);
 			Entity userEntity = ds.prepare(query).asSingleEntity();
 		 	User userid = this.getUser(login);
+
+		 	if (userid == null){throw new NullPointerException("User not found");}
 		 	
 		 	Entity twittEntity = new Entity("Twitt");
 		 	twittEntity.setProperty("idAuthor", userid.getId());
@@ -96,7 +98,7 @@ public class TinyTwittEndPoint {
 		 	query = new Query("UserFollowers").setAncestor(userEntity.getKey());
 			Entity userFollowersEntity = ds.prepare(query).asSingleEntity();
 			
-			if (userFollowersEntity == null){throw new EntityNotFoundException(null);}
+			if (userFollowersEntity == null){throw new NullPointerException("No followers found.");}
 		 	
 		 	@SuppressWarnings("unchecked")
 			ArrayList<Long> followers = (ArrayList<Long>) userFollowersEntity.getProperty("followers");
@@ -239,10 +241,66 @@ public class TinyTwittEndPoint {
 	        return true;
 	    }*/
 	 
+	 @ApiMethod(name = "createNbUsers")
+		public ArrayList<String> createNbUsers(@Named("nbUsers") int nbUsers) {
+			
+			String chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+			
+			ArrayList<String> listLogin = new ArrayList<>();
+			
+			String login = "";
+			String email = "";
+			String password = "";
+			String firstname = "";
+			String lastname = "";
+			for(int i = 1; i <= nbUsers; i++){
+				
+				String rand = "";
+				
+				for(int j = 1; j <= 10; j++){
+					int k = (int)Math.floor(Math.random() * 62);
+					rand += chars.charAt(k);
+				}
+				login =  "user" + rand;
+				email = "mail" + rand + "@supermail.com";
+				password = "password" + rand;
+				firstname = "firtsname" + rand;
+				lastname = "lastname" + rand;
+
+				createUser(login, email, password, firstname, lastname);
+				
+				listLogin.add(login);
+			}
+			return listLogin;
+	}
 	 
-	@ApiMethod(name ="retourneUn")
-	public void retournTaDaronne() {
-		String a = "TaDaronne dans l'API";
+	 @ApiMethod(name = "createNbFollowers")
+		public void createNbFollowers(@Named("nbFollowers") int nbFollowers, @Named("followed") String followed) {
+			
+			DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
+			Filter filter = new Query.FilterPredicate("login", Query.FilterOperator.EQUAL, followed);
+			Query query = new Query("User").setFilter(filter);
+			Entity userEntity = ds.prepare(query).asSingleEntity();
+			
+			if (userEntity == null){
+				throw new NullPointerException("User not found");
+			}
+			
+			ArrayList<String> listLogin = new ArrayList<>();
+			listLogin = createNbUsers(nbFollowers);
+			
+			for(int i = 0; i < listLogin.size(); i++){
+				followUser(followed, listLogin.get(i));
+				
+				ArrayList<String> listTwitt = new ArrayList<>();
+				listTwitt.add("The concept of global warming was created by and for the Chinese in order to make U.S. manufacturing non-competitive.");
+				listTwitt.add("Why would Kim Jong-un insult me by calling me \"old,\" when I would NEVER call him \"short and fat?\" Oh well, I try so hard to be his friend - and maybe someday that will happen!");
+				listTwitt.add("It's freezing and snowing in New York--we need global warming!");
+				listTwitt.add("Healthy young child goes to doctor, gets pumped with massive shot of many vaccines, doesn't feel good and changes - AUTISM. Many such cases!");
+				listTwitt.add("An 'extremely credible source' has called my office and told me that @BarackObama's birth certificate is a fraud.");
+				int k = (int)Math.floor(Math.random() * 5);
+				createTwitt(listLogin.get(i),listTwitt.get(k));
+			}
 	}
 
 }
